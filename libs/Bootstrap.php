@@ -1,40 +1,36 @@
 <?php
 
-//note that the controller paths shoul be set in a 	global config file.
 class Bootstrap {
 
 	function __construct(){
 		$url = isset($_GET['url']) ? $_GET['url'] : null;
-		//dirty
+
 		$url = rtrim($url, '/'); 
 		
 		$url = explode('/', $url);
 
 		//if there is no trailing directory in url handle in the correct way
 		if (empty($url[0])){
-			require 'controllers/index.php';
+			require CONTROLLERS_PATH.'/'.INDEX_PATH.'.php';
 			$controller = new Index();
 			$controller->index();
 			//returning false on this condition will stop the rest of the consteructor from being loaded.
 			return false;
 		}
 
-
-		//print_r($url);
 		//check file exists
-				//first argument will always be the controller hence url[0]
+		//first argument will always be the controller hence url[0]
 
-		$file = 'controllers/' . $url[0] . '.php';
+		$file = CONTROLLERS_PATH.'/' . $url[0] . '.php';
 		if(file_exists($file)){
 			require $file;
 		} else {
-			require 'controllers/error.php';
+			require CONTROLLERS_PATH.'/'.ERROR_PATH. '.php';
 			$controller = new Error();
 			$controller->index();
 			//returning false on this condition will stop the rest of the consteructor from being loaded.
 			return false;
 		}
-
 		
 		$controller = new $url[0];
 		$controller->loadModel($url[0]);
@@ -66,7 +62,7 @@ class Bootstrap {
 	}
 
 	private function error(){
-		require 'controllers/error.php';
+		require CONTROLLERS_PATH.'/'.ERROR_PATH. '.php';
 		$controller = new Error();
 		$controller->index();
 		return false;

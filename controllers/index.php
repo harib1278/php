@@ -61,9 +61,7 @@ class Index extends Controller{
 		}
 
 		// Check for error flag before attempting upload
-		if ($uploadOk == 0) {
-			$this->view->msg = "Sorry, your file was not uploaded.";
-		} else {
+		if ($uploadOk != 0) {
 		    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 
 				//generate thumbnail and save into /thumb folder
@@ -82,14 +80,15 @@ class Index extends Controller{
 	}
 
 	/**
-	*	Maintain aspect ratio formula: original height / original width x new width = new height
+	*	Private Method to generate thumbnail and upload it whilst maintaining the aspect ratio.
+	*	Formula: original height / original width * new width = new height
 	*	@param path string for image file location on the server
 	*	@return boolean value depending on success or failure of thumbnail save
 	*/
 	private function uploadThumbnail($target_file){
 		
-		// Check if directory exists
-		if (is_dir($up_dir) && is_writable($up_dir)) {
+		//Check if directory exists
+		if (is_dir(THUMB_DIRECTORY) && is_writable(THUMB_DIRECTORY)) {
 
 			$mime = getimagesize($target_file);
 
@@ -101,7 +100,7 @@ class Index extends Controller{
 			$old_x = imageSX($src_img);
 			$old_y = imageSY($src_img);
 
-			//preserve aspect ratio algo			
+			//Preserve aspect ratio algo			
 			if($old_x > $old_y) {
 
 				$thumb_w = THUMB_WIDTH;
@@ -127,7 +126,7 @@ class Index extends Controller{
 
 			imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $old_x, $old_y);
 
-			// New save location
+			//New save location
 			$new_thumb_loc = THUMB_DIRECTORY . '/' . $this->uniqueFileName();
 
 			if($mime['mime']=='image/png')  { $result = imagepng($dst_img,$new_thumb_loc,8);   }
@@ -135,7 +134,7 @@ class Index extends Controller{
 			if($mime['mime']=='image/jpeg') { $result = imagejpeg($dst_img,$new_thumb_loc,80); }
 			if($mime['mime']=='image/pjpeg'){ $result = imagejpeg($dst_img,$new_thumb_loc,80); }
 
-			//free the buffer
+			//Free the buffer
 			imagedestroy($dst_img);
 			imagedestroy($src_img);
 
@@ -146,10 +145,10 @@ class Index extends Controller{
 	}
 
 	/**
-	*	Method to generate a unique filename string
+	*	Private Method to generate a unique filename string
 	*	@return string
 	*/
-	private function uniqueFileName() {	
+	private function uniqueFileName(){	
 		return date("YmdHis") . substr((string)microtime(), 1, 8) . ".jpg";
 	}
 
