@@ -1,34 +1,36 @@
 <?php
 /* index page controller **/
-
 class Index extends Controller{
 
 	function __construct(){
-		parent::__construct();
-
-		
+		parent::__construct();		
 	}
+
+	/*
+	*	Controller method to render the / index page
+	*/
 	public function index(){
 		//assigning a value to the view using the inbuilt object variable: msg
 		$this->view->msg = '<h2>This is the homepage. Welcome!</h2>';
 
-		//echo 'INDEX INDEX';
-		$this->view->render('index/index');
-		
+		$this->view->render('index/index');		
 	}
 
+	/*
+	*	Controller method to render the /upload page
+	*/
 	public function upload(){
-
-		$this->view->render('index/upload');
-		
+		$this->view->render('index/upload');		
 	}
 
+	/*
+	*	Controller method to process the image upload form and initiate thumbnail generation and save info to DB
+	*/
 	public function image_upload(){
 		//move to constants
-		$target_dir = "images/";
-		
-		$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+		$target_dir = TARGET_DIRECTORY;
 
+		$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
@@ -42,22 +44,19 @@ class Index extends Controller{
 				$uploadOk = 0;
 			}
 		}
-
 		// Check if file already exists
 		if (file_exists($target_file)) {
-			echo "Sorry, file already exists.";
+			$this->view->msg = "Sorry, file already exists.";
 			$uploadOk = 0;
 		}
-
 		// Check file size
-		if ($_FILES["fileToUpload"]["size"] > 500000) {
-			echo "Sorry, your file is too large.";
+		if ($_FILES["fileToUpload"]["size"] > FILE_SIZE_LIMIT) {
+			$this->view->msg = "Sorry, your file is too large.";
 			$uploadOk = 0;
 		}
-
 		// Allow certain file formats
 		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-			echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+			$this->view->msg = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
 			$uploadOk = 0;
 		}
 
@@ -71,14 +70,13 @@ class Index extends Controller{
 				$this->uploadThumbnail($target_file);
 
 				//save the image info to the database
-				$this->model->uploadImage($_FILES);		    	
+				$this->model->uploadImage($_FILES);
 
 				$this->view->msg = " The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-		    } else {
-		        $this->view->msg = "Sorry, there was an error uploading your file.";
-		    }
-		}		
-
+			} else {
+				$this->view->msg = "Sorry, there was an error uploading your file.";
+			}
+		}
 		
 		$this->view->render('index/upload');
 	}
@@ -89,12 +87,6 @@ class Index extends Controller{
 	*	@return boolean value depending on success or failure of thumbnail save
 	*/
 	private function uploadThumbnail($target_file){
-
-		//move to constants file
-		$newWidth   = 250;
-		$newHeight  = 250;
-		$up_dir 	= "images/thumbs/";
-
 		
 		// Check if directory exists
 		if (is_dir($up_dir) && is_writable($up_dir)) {
@@ -112,22 +104,22 @@ class Index extends Controller{
 			//preserve aspect ratio algo			
 			if($old_x > $old_y) {
 
-				$thumb_w = $newWidth;
-				$thumb_h = $old_y / $old_x * $newWidth;
+				$thumb_w = THUMB_WIDTH;
+				$thumb_h = $old_y / $old_x * THUMB_WIDTH;
 
 			}
 
 			if($old_x < $old_y) {
 
-				$thumb_w = $old_x / $old_y * $newHeight;
-				$thumb_h = $newHeight;
+				$thumb_w = $old_x / $old_y * THUMB_HEIGHT;
+				$thumb_h = THUMB_HEIGHT;
 
 			}
 
 			if($old_x == $old_y) {
 
-				$thumb_w = $newWidth;
-				$thumb_h = $newHeight;
+				$thumb_w = THUMB_WIDTH;
+				$thumb_h = THUMB_HEIGHT;
 
 			}
 
@@ -136,7 +128,7 @@ class Index extends Controller{
 			imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $old_x, $old_y);
 
 			// New save location
-			$new_thumb_loc = $up_dir . '/' . $this->uniqueFileName();
+			$new_thumb_loc = THUMB_DIRECTORY . '/' . $this->uniqueFileName();
 
 			if($mime['mime']=='image/png')  { $result = imagepng($dst_img,$new_thumb_loc,8);   }
 			if($mime['mime']=='image/jpg')  { $result = imagejpeg($dst_img,$new_thumb_loc,80); }
@@ -147,16 +139,23 @@ class Index extends Controller{
 			imagedestroy($dst_img);
 			imagedestroy($src_img);
 
-		    return $result;
+			return $result;
 		}
 		
 		return false;
 	}
 
+	/**
+	*	Method to generate a unique filename string
+	*	@return string
+	*/
 	private function uniqueFileName() {	
 		return date("YmdHis") . substr((string)microtime(), 1, 8) . ".jpg";
 	}
 
+	/*
+	*	Controller method to render the /images page and load all image thumbnails
+	*/
 	public function images(){		
 
 		$this->view->msg = '<h2>All Images:</h2>';
@@ -164,19 +163,27 @@ class Index extends Controller{
 		$this->view->render('index/images');
 	}
 
+	/**
+	*	Controller method to render a single image
+	*	@param image ID number
+	*/
 	public function image($param = null){		
 
 		if($param){
 			$this->view->param = $param;
 		}
+
 		$this->view->msg = 'Image number: '. $param;
+		$this->view->img = $this->model->selectImage($param);
 
 		$this->view->render('index/image');
 	}
 
+	/**
+	*	Controller method to render the image info as JSON
+	*/
 	public function api(){
 		$this->model->xhrGetListings();
 	}
 
-	
 }
