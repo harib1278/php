@@ -5,7 +5,7 @@
 	    <input type="file" name="fileToUpload" id="fileToUpload"><br>
 	    Description: <br>
 	    <input type="text" name="description"><br>
-	    <input type="submit" value="Upload Image" name="submit" id="upload-submit">
+	    <input class="btn btn-success" type="submit" value="Upload Image" name="submit" id="upload-submit">
 	</form>
 	<?php
 	if(isset($this->msg)){

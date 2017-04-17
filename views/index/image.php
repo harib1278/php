@@ -13,7 +13,7 @@
 						</a>
 						<br>
 						<div class="image-desc">
-							<h3>Description: <?php echo $image['description'];?></h3>
+							<h3><b>Description:</b> <?php echo $image['description'];?></h3>
 						</div>
 						
 				<?php 

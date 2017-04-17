@@ -30,6 +30,7 @@ class Index extends Controller{
 
 		$target_file = IMAGE_DIRECTORY . basename($_FILES["fileToUpload"]["name"]);
 
+
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
@@ -70,7 +71,9 @@ class Index extends Controller{
 
 		// Check for error flag before attempting upload
 		if ($uploadOk != 0) {
-		    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+		    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], BBK_OS_PATH.$target_file)) {
+
+
 
 				//generate thumbnail and save into /thumb folder
 				$thumbName = $this->uploadThumbnail($target_file);
@@ -210,8 +213,12 @@ class Index extends Controller{
 	*/
 	public function api($id = null){
 		if(isset($id) && $id > 0){
+			//set header type as json
+			header('Content-type: application/json');
+			//output json encoded array
 			echo json_encode($this->model->getImageInfo($id));
 		} else {
+			header('Content-type: application/json');			
 			echo json_encode('Error: ID is a required parameter. E.G : /index/api/2');
 		}
 		

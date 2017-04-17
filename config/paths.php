@@ -3,9 +3,14 @@
 /* Main project path */
 define('URL', 'http://localhost/mvc/');
 
-/* bbk config 
-define('URL', 'titan.dcs.bbk.ac.uk/~tshadd01/w1fma/');
-*/
+/* bbk config */
+//define('URL', 'https://titan.dcs.bbk.ac.uk/~tshadd01/w1fma/');
+
+/* bbk os image path */
+//define('BBK_OS_PATH', '/home/tshadd01/public_www/w1fma/');
+define('BBK_OS_PATH', '');
+
+
 
 /*Project Bootstrap Paths*/
 define('CONTROLLERS_PATH', 'controllers');
