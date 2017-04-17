@@ -6,19 +6,39 @@ class Index_Model extends Model{
 		parent::__construct();
 	}
 
-	public function uploadImage($file){
+	public function uploadImage($file, $thumbName, $target_file, $dimensions){
+
+		
+
+		echo '<pre>';
+		var_dump($file);
+		var_dump($thumbName);
+		var_dump($target_file);
+		var_dump($dimensions);
+		echo '</pre>';
+
 
 		//grab image params
-		return 0;
+		//id, title , description, filename, width, height, path, thumb_path
+		//return 0;
 		//now insert using prepared statement for security
-		$sth = $this->db->prepare('INSERT INTO images (`text`) VALUES (?)');
-		$values = array($file['text']);
+		$sth = $this->db->prepare('INSERT INTO images (`title`, `description`, `filename`, `width`, `height`, `path`, `thumb`) VALUES (?,?,?,?,?,?,?)');
+		$values = array(
+			preg_replace('/\\.[^.\\s]{3,4}$/', '', $file['fileToUpload']['name']), // trim the image extension from the end of the name
+			$file['fileToUpload']['type'],
+			$file['fileToUpload']['name'],
+			$dimensions['x'],
+			$dimensions['y'],
+			$target_file,
+			$thumbName
+		);
 
 		$sth->execute($values);
 
 		//return if insert was successful
 		return $sth->rowCount();
 	}
+	
 
 	public function selectImage($imageID = null){
 

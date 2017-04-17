@@ -53,8 +53,8 @@ class Index extends Controller{
 			$uploadOk = 0;
 		}
 		// Allow certain file formats
-		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-			$this->view->msg = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+		if($imageFileType != "jpg" && $imageFileType != "jpeg") {
+			$this->view->msg = "Sorry, only JPG/JPEG files are allowed.";
 			$uploadOk = 0;
 		}
 
@@ -63,10 +63,13 @@ class Index extends Controller{
 		    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 
 				//generate thumbnail and save into /thumb folder
-				$this->uploadThumbnail($target_file);
+				$thumbName = $this->uploadThumbnail($target_file);
+
+				//get image dimensions so we can save them
+				$dimensions = $this->calculateDimensions($target_file);
 
 				//save the image info to the database
-				$this->model->uploadImage($_FILES);
+				$this->model->uploadImage($_FILES, $thumbName, $target_file, $dimensions);
 
 				$this->view->msg = " The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
 			} else {
@@ -78,10 +81,25 @@ class Index extends Controller{
 	}
 
 	/**
+	*	Helper method to calculate the x and y size dimensions of image
+	*/
+
+	private function calculateDimensions($target_file){
+		$src_img = imagecreatefromjpeg($target_file);
+
+		$dimensions = array(
+			'x' => imageSX($src_img),
+			'y' => imageSY($src_img)
+		);
+
+		return $dimensions;
+	}
+
+	/**
 	*	Private Method to generate thumbnail and upload it whilst maintaining the aspect ratio.
 	*	Formula: original height / original width * new width = new height
 	*	@param path string for image file location on the server
-	*	@return boolean value depending on success or failure of thumbnail save
+	*	@return the unique thumbnail filename
 	*/
 	private function uploadThumbnail($target_file){
 		
@@ -124,8 +142,9 @@ class Index extends Controller{
 
 			imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $old_x, $old_y);
 
+			$thumbName = $this->uniqueFileName();
 			//New save location
-			$new_thumb_loc = THUMBS_DIRECTORY . '/' . $this->uniqueFileName();
+			$new_thumb_loc = THUMBS_DIRECTORY . '/' . $thumbName;
 
 			if($mime['mime']=='image/png')  { $result = imagepng($dst_img,$new_thumb_loc,8);   }
 			if($mime['mime']=='image/jpg')  { $result = imagejpeg($dst_img,$new_thumb_loc,80); }
@@ -136,7 +155,7 @@ class Index extends Controller{
 			imagedestroy($dst_img);
 			imagedestroy($src_img);
 
-			return $result;
+			return $thumbName;
 		}
 		
 		return false;
@@ -177,7 +196,7 @@ class Index extends Controller{
 	/**
 	*	Controller method to render the image info as JSON
 	*/
-	public function api(){
+	public function api($param = null){
 		echo json_encode($this->model->getListings());
 	}
 
