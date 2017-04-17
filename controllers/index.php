@@ -92,6 +92,8 @@ class Index extends Controller{
 
 	/**
 	*	Helper method to calculate the x and y size dimensions of image
+	*	@param path location of image on server
+	*	@return array of x and y dimensions of image size
 	*/
 
 	private function calculateDimensions($target_file){
