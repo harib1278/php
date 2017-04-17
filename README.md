@@ -29,4 +29,10 @@ ALTER TABLE `images`.`images` ADD COLUMN `thumb` VARCHAR(90) NULL  AFTER `path` 
 
 ## API URL ##  
 Api is available at the following end point: /index/api/ - a number parameter is required e.g https://titan.dcs.bbk.ac.uk/~tshadd01/w1fma/index/api/3  
-
+  
+  
+## External Assets ##  
+- Jquery  
+- Bootstrap CSS Library  
+  
+* Please note that I am making use of a number of CDNs to load scripts from and thus this application must be deployed on a server with an active internet connection.
