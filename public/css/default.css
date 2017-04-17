@@ -10,10 +10,23 @@ body {
 #content {
 	background: #fff;
 	padding:20px;
+	margin: auto;
+    width: 75%;
+    border: 3px solid green;
+    padding: 10px;
 }
 
 #footer{
 	background: green;
 	color:white;
 	padding:20px;
+}
+
+.image-desc{
+	width:600px;
+	text-align: center;
+}
+
+#upload-submit{
+	margin-top: 10px;
 }

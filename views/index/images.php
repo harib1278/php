@@ -1,3 +1,4 @@
+<div id="image-gallery">
 <?php
 
 if(isset($this->msg)){ ?>
@@ -6,6 +7,8 @@ if(isset($this->msg)){ ?>
 <?php
 	foreach ($this->images as $image) { ?>
 		<a href="<?php echo URL . 'index/image/' . $image['id'];?>"><img src="<?php echo URL . THUMBS_DIRECTORY . $image['thumb'];?>" alt="<?php echo $image['description'];?>"></a>
+		
 <?php 
 	} 
 ?>
+</div>
