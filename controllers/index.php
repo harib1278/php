@@ -1,5 +1,5 @@
 <?php
-/* index page controller **/
+
 class Index extends Controller{
 
 	function __construct(){
@@ -11,7 +11,7 @@ class Index extends Controller{
 	*/
 	public function index(){
 		//assigning a value to the view using the inbuilt object variable: msg
-		$this->view->msg = '<h2>This is the homepage. Welcome!</h2>';
+		$this->view->msg = 'This is the homepage. Welcome!';
 
 		$this->view->render('index/index');		
 	}
@@ -86,7 +86,7 @@ class Index extends Controller{
 	private function uploadThumbnail($target_file){
 		
 		//Check if directory exists
-		if (is_dir(THUMB_DIRECTORY) && is_writable(THUMB_DIRECTORY)) {
+		if (is_dir(THUMBS_DIRECTORY) && is_writable(THUMBS_DIRECTORY)) {
 
 			$mime = getimagesize($target_file);
 
@@ -125,7 +125,7 @@ class Index extends Controller{
 			imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $old_x, $old_y);
 
 			//New save location
-			$new_thumb_loc = THUMB_DIRECTORY . '/' . $this->uniqueFileName();
+			$new_thumb_loc = THUMBS_DIRECTORY . '/' . $this->uniqueFileName();
 
 			if($mime['mime']=='image/png')  { $result = imagepng($dst_img,$new_thumb_loc,8);   }
 			if($mime['mime']=='image/jpg')  { $result = imagejpeg($dst_img,$new_thumb_loc,80); }
@@ -155,7 +155,7 @@ class Index extends Controller{
 	*/
 	public function images(){		
 
-		$this->view->msg = '<h2>All Images:</h2>';
+		$this->view->msg = 'All Images:';
 
 		$this->view->render('index/images');
 	}
@@ -165,22 +165,20 @@ class Index extends Controller{
 	*	@param image ID number
 	*/
 	public function image($param = null){
-		
+
 		if($param){
 			$this->view->msg = 'Image number: '. $param;
-			$this->view->img = $this->model->selectImage($param);
-
-			$this->view->render('index/image');
+			$this->view->img = $this->model->selectImage($param);			
 		}
 
-		
+		$this->view->render('index/image');
 	}
 
 	/**
 	*	Controller method to render the image info as JSON
 	*/
 	public function api(){
-		echo json_encode($this->model->xhrGetListings());
+		echo json_encode($this->model->getListings());
 	}
 
 }

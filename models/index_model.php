@@ -12,7 +12,7 @@ class Index_Model extends Model{
 		return 0;
 		//now insert using prepared statement for security
 		$sth = $this->db->prepare('INSERT INTO images (`text`) VALUES (?)');
-		$values = array($_POST['text']);
+		$values = array($file['text']);
 
 		$sth->execute($values);
 
@@ -31,7 +31,7 @@ class Index_Model extends Model{
 		return $data = $sth->fetchAll();
 	}
 
-	public function xhrGetListings(){
+	public function getListings(){
 
 		$sth = $this->db->prepare('SELECT * FROM images');
 
