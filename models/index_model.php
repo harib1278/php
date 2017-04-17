@@ -38,9 +38,7 @@ class Index_Model extends Model{
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		$sth->execute();
 
-		$data = $sth->fetchAll();
-
-		echo json_encode($data);
+		return $sth->fetchAll();		
 	}
 
 }

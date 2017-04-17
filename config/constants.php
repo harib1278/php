@@ -1,11 +1,5 @@
 <?php
 
-/*Project Bootstrap Paths*/
-
-define('CONTROLLERS_PATH', 'controllers');
-define('INDEX_PATH', 'index');
-define('ERROR_PATH', 'error');
-
 /* Parameters for thumbnail top size size definitions */
 define('THUMB_HEIGHT', 250);
 define('THUMB_WIDTH',  250);

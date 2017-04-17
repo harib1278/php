@@ -4,14 +4,12 @@ class Bootstrap {
 
 	function __construct(){
 		$url = isset($_GET['url']) ? $_GET['url'] : null;
-
-		$url = rtrim($url, '/'); 
-		
+		$url = rtrim($url, '/');		
 		$url = explode('/', $url);
 
 		//if there is no trailing directory in url handle in the correct way
 		if (empty($url[0])){
-			require CONTROLLERS_PATH.'/'.INDEX_PATH.'.php';
+			require CONTROLLERS_PATH .'/'. INDEX_PATH .'.php';
 			$controller = new Index();
 			$controller->index();
 			//returning false on this condition will stop the rest of the consteructor from being loaded.
@@ -21,11 +19,11 @@ class Bootstrap {
 		//check file exists
 		//first argument will always be the controller hence url[0]
 
-		$file = CONTROLLERS_PATH.'/' . $url[0] . '.php';
+		$file = CONTROLLERS_PATH .'/' . $url[0] . '.php';
 		if(file_exists($file)){
 			require $file;
 		} else {
-			require CONTROLLERS_PATH.'/'.ERROR_PATH. '.php';
+			require CONTROLLERS_PATH .'/'. ERROR_PATH. '.php';
 			$controller = new Error();
 			$controller->index();
 			//returning false on this condition will stop the rest of the consteructor from being loaded.
@@ -43,7 +41,6 @@ class Bootstrap {
 			} else {
 				$this->error();
 			}
-
 			
 		} else {
 			if (isset($url[1])){
@@ -58,13 +55,14 @@ class Bootstrap {
 			}
 		}
 
-		
 	}
 
 	private function error(){
-		require CONTROLLERS_PATH.'/'.ERROR_PATH. '.php';
+		require CONTROLLERS_PATH .'/'. ERROR_PATH . '.php';
+
 		$controller = new Error();
 		$controller->index();
+
 		return false;
 	}
 }

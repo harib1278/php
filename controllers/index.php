@@ -27,10 +27,8 @@ class Index extends Controller{
 	*	Controller method to process the image upload form and initiate thumbnail generation and save info to DB
 	*/
 	public function image_upload(){
-		//move to constants
-		$target_dir = TARGET_DIRECTORY;
 
-		$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+		$target_file = TARGET_DIRECTORY . basename($_FILES["fileToUpload"]["name"]);
 
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
@@ -166,23 +164,23 @@ class Index extends Controller{
 	*	Controller method to render a single image
 	*	@param image ID number
 	*/
-	public function image($param = null){		
-
+	public function image($param = null){
+		
 		if($param){
-			$this->view->param = $param;
+			$this->view->msg = 'Image number: '. $param;
+			$this->view->img = $this->model->selectImage($param);
+
+			$this->view->render('index/image');
 		}
 
-		$this->view->msg = 'Image number: '. $param;
-		$this->view->img = $this->model->selectImage($param);
-
-		$this->view->render('index/image');
+		
 	}
 
 	/**
 	*	Controller method to render the image info as JSON
 	*/
 	public function api(){
-		$this->model->xhrGetListings();
+		echo json_encode($this->model->xhrGetListings());
 	}
 
 }
