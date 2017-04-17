@@ -59,7 +59,7 @@ class Index_Model extends Model{
 	*/
 	public function selectAllImages(){
 
-		$sth = $this->db->prepare("SELECT id, description, thumb FROM images ORDER BY id DESC");
+		$sth = $this->db->prepare("SELECT id, title, description, thumb FROM images ORDER BY id DESC");
 		$sth->setFetchMode(PDO::FETCH_ASSOC);
 		$sth->execute();
 

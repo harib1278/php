@@ -30,6 +30,7 @@
 			  <ul class="nav navbar-nav">
 			    <li><a href="<?php echo URL; ?>index/upload">Upload</a></li>
 			    <li><a href="<?php echo URL; ?>index/images">Images</a></li>		    
+			    <li><a href="<?php echo URL; ?>index/api">API</a></li>		    
 			  </ul>		
 			
 			</div><!-- /.navbar-collapse -->

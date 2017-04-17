@@ -212,7 +212,7 @@ class Index extends Controller{
 		if(isset($id) && $id > 0){
 			echo json_encode($this->model->getImageInfo($id));
 		} else {
-			echo json_encode('Error: ID is a required parameter');
+			echo json_encode('Error: ID is a required parameter. E.G : /index/api/2');
 		}
 		
 	}
