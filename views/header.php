@@ -14,13 +14,10 @@
 </head>
 <body>
 	<nav>
-	<?php Session::init(); ?>
 		<div id="header">
 			<a href="<?php echo URL; ?>index">Index</a>
 			<a href="<?php echo URL; ?>index/upload">Upload</a>
-			<a href="<?php echo URL; ?>index/images">View</a>
-			
-			
+			<a href="<?php echo URL; ?>index/images">View</a>		
 		</div>
 	</nav>
 	<div id="content">

@@ -12,7 +12,6 @@ require ('libs/Model.php');
 
 // library
 require ('libs/Database.php');
-require ('libs/Session.php');
 
 
 $app = new Bootstrap();
