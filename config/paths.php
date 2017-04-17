@@ -1,7 +1,7 @@
 <?php
 
 /* Main project path */
-define('URL', 'http://localhost/mvc/');
+define('URL', '');
 
 /* bbk config */
 //define('URL', 'https://titan.dcs.bbk.ac.uk/~tshadd01/w1fma/');
