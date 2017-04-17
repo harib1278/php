@@ -8,8 +8,9 @@
 	    <input class="btn btn-success" type="submit" value="Upload Image" name="submit" id="upload-submit">
 	</form>
 	<?php
-	if(isset($this->msg)){
-		echo $this->msg;
+	if(isset($this->msg)){ 
+		?><p><?php echo $this->msg; ?></p><?php
+
 	}
 	?>
 </div>
