@@ -28,19 +28,29 @@ class Index extends Controller{
 	*/
 	public function image_upload(){
 
-		$target_file = TARGET_DIRECTORY . basename($_FILES["fileToUpload"]["name"]);
+		$target_file = IMAGE_DIRECTORY . basename($_FILES["fileToUpload"]["name"]);
 
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
 		// Check if image file is a actual image or fake image
 		if(isset($_POST["submit"])) {
-			$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-			if($check !== false) {
-				$uploadOk = 1;
-			} else {
-				$uploadOk = 0;
+			//check the file isnt empty
+			if(!empty($_FILES["fileToUpload"]["tmp_name"])){
+				$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+				if($check !== false) {
+					$uploadOk = 1;
+				} else {
+					$uploadOk = 0;
+				}
 			}
+			
+		}
+
+		// Check the description isnt blank
+		if ($_POST["description"] == '' || $_POST["description"] == null) {
+			$this->view->msg = "Sorry, description cannot be blank.";
+			$uploadOk = 0;
 		}
 		// Check if file already exists
 		if (file_exists($target_file)) {
@@ -69,7 +79,7 @@ class Index extends Controller{
 				$dimensions = $this->calculateDimensions($target_file);
 
 				//save the image info to the database
-				$this->model->uploadImage($_FILES, $thumbName, $target_file, $dimensions);
+				$this->model->uploadImage($_FILES, $_POST["description"], $thumbName, $target_file, $dimensions);
 
 				$this->view->msg = " The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
 			} else {
@@ -174,7 +184,8 @@ class Index extends Controller{
 	*/
 	public function images(){		
 
-		$this->view->msg = 'All Images:';
+		$this->view->images = $this->model->selectAllImages();
+		$this->view->msg    = 'All Images:';
 
 		$this->view->render('index/images');
 	}
@@ -183,11 +194,10 @@ class Index extends Controller{
 	*	Controller method to render a single image
 	*	@param image ID number
 	*/
-	public function image($param = null){
+	public function image($id = null){
 
-		if($param){
-			$this->view->msg = 'Image number: '. $param;
-			$this->view->img = $this->model->selectImage($param);			
+		if($id){
+			$this->view->image = $this->model->selectImage($id);			
 		}
 
 		$this->view->render('index/image');
@@ -196,8 +206,13 @@ class Index extends Controller{
 	/**
 	*	Controller method to render the image info as JSON
 	*/
-	public function api($param = null){
-		echo json_encode($this->model->getListings());
+	public function api($id = null){
+		if(isset($id) && $id > 0){
+			echo json_encode($this->model->getImageInfo($id));
+		} else {
+			echo json_encode('Error: ID is a required parameter');
+		}
+		
 	}
 
 }

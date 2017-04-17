@@ -10,4 +10,4 @@ define('ERROR_PATH', 'error');
 
 /* Image Paths */
 define('THUMBS_DIRECTORY', 'images/thumbs/');
-define('TARGET_DIRECTORY', 'images/');
+define('IMAGE_DIRECTORY', 'images/');
