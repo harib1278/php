@@ -3,6 +3,10 @@
 /* Main project path */
 define('URL', 'http://localhost/mvc/');
 
+/* bbk config 
+define('URL', 'titan.dcs.bbk.ac.uk/~tshadd01/w1fma/');
+*/
+
 /*Project Bootstrap Paths*/
 define('CONTROLLERS_PATH', 'controllers');
 define('INDEX_PATH', 'index');
