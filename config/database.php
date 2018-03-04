@@ -1,10 +1,10 @@
 <?php
 
 /* Main database config settings */
-define('DB_NAME', '');
-define('DB_USER', '');
-define('DB_PASS', '');
-define('DB_HOST', '');
+define('DB_NAME', 'app');
+define('DB_USER', 'app');
+define('DB_PASS', 'W4+MBhBA#+');
+define('DB_HOST', 'localhost');
 
 /* bbk config left in for visual aid*/
 //define("DB_NAME", "tshadd01db");
