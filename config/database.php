@@ -1,9 +1,9 @@
 <?php
 
 /* Main database config settings */
-define('DB_NAME', 'app');
-define('DB_USER', 'app');
-define('DB_PASS', 'W4+MBhBA#+');
+define('DB_NAME', 'menagerie');
+define('DB_USER', 'root');
+define('DB_PASS', '#e[XZh4X>[');
 define('DB_HOST', 'localhost');
 
 /* bbk config left in for visual aid*/
