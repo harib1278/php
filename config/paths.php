@@ -1,7 +1,7 @@
 <?php
 
 /* Main project path */
-define('URL', '34.244.9.90/php/');
+define('URL', '');
 
 /* bbk config */
 //define('URL', 'https://titan.dcs.bbk.ac.uk/~tshadd01/w1fma/');
