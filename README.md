@@ -1,4 +1,4 @@
-# PHP FMA BBK_SSCS023H5_1617 - Thomas Shaddock  
+# PHP FMA - Thomas Shaddock  
   
 ## Project URL ##  
 https://titan.dcs.bbk.ac.uk/~tshadd01/w1fma/  
